@@ -5,7 +5,7 @@ import { getDb } from "@/lib/db";
 import PhoneField from "@/app/components/PhoneField";
 
 const PLAN_LABELS: Record<string, string> = { free: "Free", pro: "Pro", business: "Business" };
-const PLAN_PRICES: Record<string, string> = { free: "Free forever", pro: "$15/month", business: "$49/month" };
+const PLAN_PRICES: Record<string, string> = { free: "Free forever", pro: "$49/month", business: "$99/month" };
 const PLAN_COLORS: Record<string, string> = {
   free: "bg-slate-100 text-slate-600",
   pro: "bg-brand-100 text-brand-700",
@@ -93,11 +93,11 @@ export default async function AccountPage() {
           {!isPaid && (
             <div className="mt-4 pt-4 border-t border-slate-100 grid sm:grid-cols-2 gap-3">
               <div className="bg-brand-50 rounded-lg p-3">
-                <p className="text-xs font-bold text-brand-700 mb-0.5">Pro — $15/mo</p>
+                <p className="text-xs font-bold text-brand-700 mb-0.5">Growth — $49/mo</p>
                 <p className="text-xs text-brand-600">Unlimited agents, 200 msgs/day, lead capture, calendar booking</p>
               </div>
               <div className="bg-slate-900 rounded-lg p-3">
-                <p className="text-xs font-bold text-white mb-0.5">Business — $49/mo</p>
+                <p className="text-xs font-bold text-white mb-0.5">Business — $99/mo</p>
                 <p className="text-xs text-slate-400">Hire AI employees, web search, 1,000 msgs/day</p>
               </div>
             </div>
@@ -107,7 +107,7 @@ export default async function AccountPage() {
             <div className="mt-4 pt-4 border-t border-slate-100">
               <p className="text-xs font-semibold text-slate-500 mb-1">Want web search and AI employees?</p>
               <Link href="/pricing" className="text-xs text-brand-600 font-semibold hover:underline">
-                Upgrade to Business — $49/mo →
+                Upgrade to Business — $99/mo →
               </Link>
             </div>
           )}
