@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { EMPLOYEE_ROLES, type EmployeeRole } from "@/lib/employee-roles";
 
 type Step = "pick" | "customize" | "hiring" | "done" | "claim";
@@ -15,8 +16,13 @@ export default function HirePage() {
 }
 
 function HireFlow() {
-  const [step, setStep] = useState<Step>("pick");
-  const [selectedRole, setSelectedRole] = useState<EmployeeRole | null>(null);
+  const params = useSearchParams();
+  const preselectedRoleId = params.get("role");
+
+  const [step, setStep] = useState<Step>(() => preselectedRoleId ? "customize" : "pick");
+  const [selectedRole, setSelectedRole] = useState<EmployeeRole | null>(() =>
+    preselectedRoleId ? (EMPLOYEE_ROLES.find((r) => r.id === preselectedRoleId) ?? null) : null
+  );
   const [businessName, setBusinessName] = useState("");
   const [context, setContext] = useState("");
   const [neverDo, setNeverDo] = useState("");

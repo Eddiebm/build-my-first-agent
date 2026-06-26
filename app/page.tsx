@@ -103,55 +103,75 @@ export default function HomePage() {
             and your agent is live — ready to share with anyone.
           </p>
 
-          {/* Three-path choice */}
-          <div className="grid sm:grid-cols-3 gap-4 max-w-3xl mx-auto mb-6">
-            {/* Path 1 — Hire an employee */}
+          {/* Four-path choice */}
+          <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto mb-4">
+            {/* Path 1 — Not sure */}
+            <Link
+              href="/suggest"
+              className="group relative bg-brand-500 hover:bg-brand-600 text-white rounded-2xl p-6 text-left transition-all shadow-lg shadow-brand-500/25 hover:shadow-xl hover:-translate-y-0.5"
+            >
+              <div className="inline-flex items-center gap-1.5 bg-white/20 text-white text-xs font-bold px-2 py-0.5 rounded-full mb-3">
+                ✦ Start here
+              </div>
+              <div className="text-3xl mb-2">🤔</div>
+              <p className="font-extrabold text-lg leading-snug mb-1">
+                Not sure? We&apos;ll suggest
+              </p>
+              <p className="text-brand-100 text-sm leading-relaxed">
+                Tell us what you do. We&apos;ll recommend the right employees for your profession.
+              </p>
+              <p className="mt-4 text-white font-semibold text-sm group-hover:underline">
+                Get my recommendations →
+              </p>
+            </Link>
+
+            {/* Path 2 — Hire an employee */}
             <Link
               href="/hire"
               className="group relative bg-slate-900 hover:bg-slate-800 text-white rounded-2xl p-6 text-left transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
-              <div className="text-3xl mb-3">👔</div>
+              <div className="text-3xl mb-2">👔</div>
               <p className="font-extrabold text-lg leading-snug mb-1">
                 Hire an employee
               </p>
               <p className="text-slate-400 text-sm leading-relaxed">
-                Pick a role. We train and deploy them. Done in 60 seconds.
+                Browse 8 pre-built roles. Pick one, customize, deploy in 60 seconds.
               </p>
               <p className="mt-4 text-white font-semibold text-sm group-hover:underline">
-                See roles →
+                See all roles →
               </p>
             </Link>
 
-            {/* Path 2 — Quick fix */}
+            {/* Path 3 — Quick fix */}
             <Link
               href="/quick"
-              className="group relative bg-brand-500 hover:bg-brand-600 text-white rounded-2xl p-6 text-left transition-all shadow-lg shadow-brand-500/25 hover:shadow-xl hover:-translate-y-0.5"
+              className="group relative bg-white hover:bg-slate-50 text-slate-800 rounded-2xl p-6 text-left transition-all border-2 border-slate-200 hover:border-brand-300 hover:-translate-y-0.5"
             >
-              <div className="text-3xl mb-3">⚡</div>
+              <div className="text-3xl mb-2">⚡</div>
               <p className="font-extrabold text-lg leading-snug mb-1">
                 Fix one problem
               </p>
-              <p className="text-brand-100 text-sm leading-relaxed">
-                Answer 3 questions. Agent goes live. Done in 2 minutes.
+              <p className="text-slate-500 text-sm leading-relaxed">
+                Answer 3 questions. Custom agent goes live. Done in 2 minutes.
               </p>
-              <p className="mt-4 text-white font-semibold text-sm group-hover:underline">
+              <p className="mt-4 text-brand-600 font-semibold text-sm group-hover:underline">
                 Start now →
               </p>
             </Link>
 
-            {/* Path 3 — Learn mode */}
+            {/* Path 4 — Learn mode */}
             <Link
               href="/builder"
-              className="group relative bg-white hover:bg-slate-50 text-slate-800 rounded-2xl p-6 text-left transition-all border-2 border-slate-200 hover:border-brand-300 hover:-translate-y-0.5"
+              className="group relative bg-white hover:bg-slate-50 text-slate-800 rounded-2xl p-6 text-left transition-all border-2 border-slate-200 hover:border-slate-300 hover:-translate-y-0.5"
             >
-              <div className="text-3xl mb-3">🎓</div>
+              <div className="text-3xl mb-2">🎓</div>
               <p className="font-extrabold text-lg leading-snug mb-1">
                 I want to learn
               </p>
               <p className="text-slate-500 text-sm leading-relaxed">
-                10 questions, full blueprint, 9 levels. Takes ~20 min.
+                10 questions, full blueprint, 9 learning levels. Takes ~20 min.
               </p>
-              <p className="mt-4 text-brand-600 font-semibold text-sm group-hover:underline">
+              <p className="mt-4 text-slate-600 font-semibold text-sm group-hover:underline">
                 Open the builder →
               </p>
             </Link>
@@ -307,29 +327,29 @@ export default function HomePage() {
       <section className="py-20 px-4 sm:px-6 bg-brand-500">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-            Which path is right for you?
+            Not sure where to start?
           </h2>
           <p className="text-brand-100 text-lg mb-8">
-            Both are free. Both get you a live agent. Pick your speed.
+            Tell us your profession. We&apos;ll recommend exactly who to hire.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
-              href="/hire"
+              href="/suggest"
               className="bg-white hover:bg-slate-50 text-slate-900 text-sm font-bold px-6 py-4 rounded-xl transition-all shadow-lg inline-block hover:-translate-y-0.5"
             >
-              👔 Hire an employee — 60 sec
+              🤔 Get my recommendation — 30 sec
+            </Link>
+            <Link
+              href="/hire"
+              className="bg-brand-400 hover:bg-brand-300 text-white text-sm font-bold px-6 py-4 rounded-xl transition-all inline-block hover:-translate-y-0.5"
+            >
+              👔 Browse all roles — 60 sec
             </Link>
             <Link
               href="/quick"
-              className="bg-brand-400 hover:bg-brand-300 text-white text-sm font-bold px-6 py-4 rounded-xl transition-all inline-block hover:-translate-y-0.5"
-            >
-              ⚡ Fix one problem — 2 min
-            </Link>
-            <Link
-              href="/builder"
               className="bg-brand-400 hover:bg-brand-300 text-white text-sm font-bold px-6 py-4 rounded-xl transition-all inline-block hover:-translate-y-0.5 border border-brand-300"
             >
-              🎓 Learn as I go — 20 min
+              ⚡ Fix one problem — 2 min
             </Link>
           </div>
         </div>
