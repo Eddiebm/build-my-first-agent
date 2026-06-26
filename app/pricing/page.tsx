@@ -4,32 +4,28 @@ import Link from "next/link";
 import { useState } from "react";
 
 const FREE_FEATURES = [
-  "10-question agent wizard",
-  "Live blueprint generator",
-  "9 learning levels",
-  "8 example templates",
-  "1 saved agent",
-  "500 lifetime messages",
+  "1 AI employee",
+  "Chat widget for your website",
+  "500 lifetime conversations",
+  "All 12 pre-built roles",
+  "No credit card required",
 ];
 
 const PRO_FEATURES = [
   "Everything in Free",
-  "Unlimited saved agents",
-  "Live AI chat prototype",
-  "200 messages/day per agent",
-  "Lead capture integration",
+  "Unlimited AI employees",
+  "200 conversations/day per employee",
+  "Voice phone number (answer real calls)",
+  "Lead capture — saves caller info automatically",
   "Calendar booking integration",
-  "Export system prompt & blueprint",
   "Date/time & calculator tools",
 ];
 
 const BUSINESS_FEATURES = [
   "Everything in Pro",
-  "Web search tool (live internet)",
-  "URL reader tool",
-  "1,000 messages/day per agent",
-  "Hire a pre-built AI employee",
-  "Sales, leasing, grant research roles",
+  "1,000 conversations/day per employee",
+  "Live web search (employees can look things up)",
+  "URL reader (employees can read web pages)",
   "Priority support",
 ];
 
@@ -75,9 +71,11 @@ export default function PricingPage() {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-slate-900 mb-3">Simple pricing</h1>
+          <h1 className="text-4xl font-extrabold text-slate-900 mb-3">
+            Cheaper than a part-time hire. More reliable than an answering service.
+          </h1>
           <p className="text-lg text-slate-600">
-            Start free. Upgrade when you&apos;re ready to ship.
+            Start free. Add voice and lead capture when you&apos;re ready.
           </p>
         </div>
 
@@ -98,10 +96,10 @@ export default function PricingPage() {
               ))}
             </ul>
             <Link
-              href="/auth/signup"
+              href="/hire"
               className="block w-full text-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition-colors text-sm"
             >
-              Get started free
+              Hire your first employee →
             </Link>
           </div>
 
@@ -128,15 +126,12 @@ export default function PricingPage() {
               disabled={loading !== null}
               className="block w-full text-center bg-white hover:bg-brand-50 text-brand-600 font-bold py-3 rounded-xl transition-colors text-sm disabled:opacity-60"
             >
-              {loading === "pro" ? "Loading…" : "Upgrade to Pro →"}
+              {loading === "pro" ? "Loading…" : "Get Pro →"}
             </button>
           </div>
 
           {/* Business */}
           <div className="bg-slate-900 rounded-2xl p-8 relative overflow-hidden flex flex-col">
-            <div className="absolute top-4 right-4 bg-white/10 text-slate-300 text-xs font-bold px-2 py-0.5 rounded-full">
-              For teams
-            </div>
             <div className="mb-6">
               <p className="text-sm font-bold text-slate-400 uppercase tracking-wide mb-1">Business</p>
               <p className="text-4xl font-extrabold text-white">$49</p>
@@ -155,32 +150,31 @@ export default function PricingPage() {
               disabled={loading !== null}
               className="block w-full text-center bg-brand-500 hover:bg-brand-400 text-white font-bold py-3 rounded-xl transition-colors text-sm disabled:opacity-60"
             >
-              {loading === "business" ? "Loading…" : "Upgrade to Business →"}
+              {loading === "business" ? "Loading…" : "Get Business →"}
             </button>
           </div>
         </div>
 
-        {/* Comparison callout */}
-        <div className="mt-10 bg-white rounded-2xl border border-slate-200 p-6">
-          <h2 className="text-sm font-bold text-slate-900 mb-4">Which plan is right for you?</h2>
-          <div className="grid sm:grid-cols-3 gap-4 text-sm text-slate-600">
-            <div>
-              <p className="font-bold text-slate-900 mb-1">Free — Try it out</p>
-              <p>Build one agent and learn how AI agents work. Perfect for exploring before committing.</p>
-            </div>
-            <div>
-              <p className="font-bold text-slate-900 mb-1">Pro — Build & deploy</p>
-              <p>Multiple agents, live AI, lead capture, and calendar booking. For builders who want to ship.</p>
-            </div>
-            <div>
-              <p className="font-bold text-brand-500 mb-1">Business — Hire AI employees</p>
-              <p>Pre-built roles (SDR, leasing, grant researcher) with live web search. For companies replacing repetitive work.</p>
-            </div>
+        {/* Comparison */}
+        <div className="mt-10 bg-white rounded-2xl border border-slate-200 p-8">
+          <h2 className="text-lg font-bold text-slate-900 mb-6 text-center">How we compare</h2>
+          <div className="grid sm:grid-cols-3 gap-6 text-sm">
+            {[
+              { label: "Part-time receptionist", cost: "~$2,000/mo", sub: "Sick days. Turnover. Benefits. Training.", bad: true },
+              { label: "Answering service", cost: "~$300/mo", sub: "Takes a message. Never books. No follow-up.", bad: true },
+              { label: "Your AI employee (Pro)", cost: "$15/mo", sub: "Answers, captures leads, books, works 24/7.", bad: false },
+            ].map((item) => (
+              <div key={item.label} className={`rounded-xl p-5 border ${item.bad ? "border-slate-200 bg-slate-50" : "border-brand-200 bg-brand-50"}`}>
+                <p className={`font-bold mb-1 ${item.bad ? "text-slate-700" : "text-brand-700"}`}>{item.label}</p>
+                <p className={`text-2xl font-extrabold mb-2 ${item.bad ? "text-slate-500 line-through" : "text-brand-600"}`}>{item.cost}</p>
+                <p className={`text-xs leading-relaxed ${item.bad ? "text-slate-400" : "text-brand-700"}`}>{item.sub}</p>
+              </div>
+            ))}
           </div>
         </div>
 
         <p className="text-center text-sm text-slate-400 mt-8">
-          Cancel anytime. No lock-in. Questions?{" "}
+          Cancel anytime · No lock-in · Questions?{" "}
           <a href="mailto:hello@buildmyfirstagent.com" className="text-brand-600 hover:underline">
             Email us
           </a>
