@@ -57,7 +57,7 @@ export async function buyPhoneNumber(
     headers: vapiHeaders(),
     body: JSON.stringify({
       provider: "vapi",
-      areaCode: areaCode || "415",
+      numberDesiredAreaCode: areaCode || "415",
       assistantId,
     }),
   });
