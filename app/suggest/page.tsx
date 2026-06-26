@@ -325,12 +325,12 @@ const SUGGESTIONS: Record<string, Suggestion[]> = {
   ],
   restaurant: [
     {
-      roleId: "front-desk-receptionist",
-      headline: "Handle reservation calls without pulling staff mid-service",
+      roleId: "inbox-assistant",
+      headline: "Stop losing reservations to missed calls during the dinner rush",
       why: [
-        "Answers questions about hours, location, menu, and dietary options",
-        "Takes reservations and routes booking requests to your system",
-        "Handles event inquiries and captures contact info for follow-up",
+        "Answers calls about hours, menu, dietary options, and availability",
+        "Takes reservation details and captures caller info for follow-up",
+        "Handles event inquiries so your staff can focus on the floor",
       ],
     },
     {
@@ -354,12 +354,12 @@ const SUGGESTIONS: Record<string, Suggestion[]> = {
   ],
   trades: [
     {
-      roleId: "billing-collections",
-      headline: "Recover the money sitting in unpaid invoices",
+      roleId: "inbox-assistant",
+      headline: "Answer every missed call even when you're on the job site",
       why: [
-        "Sends polite but firm payment reminders before jobs go to collections",
-        "Handles billing disputes professionally so you don't lose the client",
-        "Captures updated contact info when a client's details change",
+        "Handles inbound calls 24/7 — pricing, availability, service area questions",
+        "Captures caller name, number, and what they need so you can call back",
+        "Never loses a lead to voicemail while you're on a job",
       ],
     },
     {
@@ -372,12 +372,12 @@ const SUGGESTIONS: Record<string, Suggestion[]> = {
       ],
     },
     {
-      roleId: "customer-service-rep",
-      headline: "Respond to quote requests and questions 24/7",
+      roleId: "billing-collections",
+      headline: "Recover the money sitting in unpaid invoices",
       why: [
-        "Answers questions about your services, availability, and pricing ranges",
-        "Captures lead details so you can call back qualified jobs only",
-        "Handles follow-ups on open quotes so work doesn't go to a competitor",
+        "Sends polite but firm payment reminders before jobs go to collections",
+        "Handles billing disputes professionally so you don't lose the client",
+        "Captures updated contact info when a client's details change",
       ],
     },
   ],
@@ -490,7 +490,7 @@ export default function SuggestPage() {
 
             <div className="mt-6 text-center">
               <Link href="/hire" className="text-sm text-slate-400 hover:text-slate-600 transition-colors">
-                See all 8 available roles →
+                See all 12 available roles →
               </Link>
             </div>
           </div>

@@ -61,7 +61,7 @@ export default async function LeadsPage({
 
         {agents.length === 0 ? (
           <div className="bg-white rounded-2xl border border-slate-200 p-16 text-center">
-            <p className="text-slate-500">No agents yet. <Link href="/builder" className="text-brand-600 font-semibold">Build one →</Link></p>
+            <p className="text-slate-500">No agents yet. <Link href="/hire" className="text-brand-600 font-semibold">Hire one →</Link></p>
           </div>
         ) : (
           <>

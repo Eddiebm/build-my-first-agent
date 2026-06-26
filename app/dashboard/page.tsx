@@ -38,7 +38,7 @@ export default async function DashboardPage({
               📋 Leads
             </Link>
             <Link
-              href="/builder"
+              href="/hire"
               className="bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
             >
               + New Agent
@@ -77,7 +77,7 @@ export default async function DashboardPage({
                 You&apos;re on the Free plan
               </p>
               <p className="text-brand-700 text-xs mt-0.5">
-                Upgrade to Pro to save unlimited agents, export blueprints, and test with live AI.
+                Upgrade to Pro to unlock unlimited agents, voice phone numbers, and lead capture.
               </p>
             </div>
             <Link
@@ -101,13 +101,13 @@ export default async function DashboardPage({
             <div className="text-5xl mb-4">🤖</div>
             <h2 className="text-xl font-bold text-slate-900 mb-2">No agents yet</h2>
             <p className="text-slate-500 text-sm mb-6">
-              Build your first agent in about 20 minutes.
+              Hire your first AI employee in 60 seconds.
             </p>
             <Link
-              href="/builder"
+              href="/hire"
               className="bg-brand-500 hover:bg-brand-600 text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm"
             >
-              Build My First Agent →
+              Hire your first employee →
             </Link>
           </div>
         ) : (
@@ -185,7 +185,7 @@ export default async function DashboardPage({
 
             {/* New agent card */}
             <Link
-              href="/builder"
+              href="/hire"
               className="bg-slate-50 hover:bg-brand-50 border-2 border-dashed border-slate-300 hover:border-brand-300 rounded-xl p-5 flex flex-col items-center justify-center text-center transition-all group min-h-[140px]"
             >
               <span className="text-3xl mb-2">+</span>

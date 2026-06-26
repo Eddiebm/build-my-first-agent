@@ -377,8 +377,6 @@ ${neverDo ? `You must never: ${neverDo}` : "Never promise a refund or replacemen
 When a customer has an issue that needs follow-up, use capture_lead to save their name, email, and order details so the team can resolve it.`;
     },
   },
-];
-
   {
     id: "inbox-assistant",
     title: "Inbox Assistant",
