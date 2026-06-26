@@ -3,6 +3,7 @@ export const runtime = "edge";
 import { NextRequest } from "next/server";
 import { getDb } from "@/lib/db";
 import { getToolsByName } from "@/lib/tools";
+import { sendEmail, leadNotificationEmail } from "@/lib/email";
 
 interface Message {
   role: "user" | "assistant" | "system" | "tool";
@@ -210,13 +211,16 @@ export async function POST(req: NextRequest) {
   const { messages, agentId } = body;
   let systemPrompt = body.systemPrompt;
   let agentTools: string[] = [];
+  let agentOwnerEmail: string | null = null;
+  let agentDisplayName = "";
 
   if (agentId) {
     const sql = getDb();
     const rows = await sql`
       SELECT blueprint, published, message_count, tools, integrations,
-             daily_message_count, daily_reset_at,
-             (SELECT plan FROM users WHERE id = agents.user_id) AS plan
+             daily_message_count, daily_reset_at, name,
+             (SELECT plan FROM users WHERE id = agents.user_id) AS plan,
+             (SELECT email FROM users WHERE id = agents.user_id) AS owner_email
       FROM agents WHERE id = ${agentId}
     `;
     if (rows.length === 0) {
@@ -251,6 +255,9 @@ export async function POST(req: NextRequest) {
         { status: 429 }
       );
     }
+
+    agentOwnerEmail = (agent.owner_email as string | null) ?? null;
+    agentDisplayName = agent.name as string;
 
     const bp = agent.blueprint as { systemPrompt?: string };
     systemPrompt = bp?.systemPrompt ?? "You are a helpful AI assistant.";
@@ -307,6 +314,19 @@ export async function POST(req: NextRequest) {
               INSERT INTO leads (agent_id, name, email, phone, notes)
               VALUES (${agentId}, ${args.name ?? null}, ${args.email ?? null}, ${args.phone ?? null}, ${args.notes ?? null})
             `;
+            if (agentOwnerEmail) {
+              sendEmail({
+                to: agentOwnerEmail,
+                subject: `New lead: ${args.name ?? args.email ?? "someone"} via ${agentDisplayName}`,
+                html: leadNotificationEmail({
+                  agentName: agentDisplayName,
+                  leadName: args.name,
+                  leadEmail: args.email,
+                  leadPhone: args.phone,
+                  notes: args.notes,
+                }),
+              }).catch(() => {});
+            }
             return `Got it! I've saved ${args.name ?? "your"} contact info for the team. Someone will follow up soon.`;
           },
         };

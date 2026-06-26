@@ -8,7 +8,7 @@ import { Suspense } from "react";
 function SignUpForm() {
   const router = useRouter();
   const params = useSearchParams();
-  const next = params.get("next") ?? "/dashboard";
+  const next = params.get("next") ?? "/quick?welcome=1";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -93,7 +93,11 @@ function SignUpForm() {
           </p>
         </div>
         <p className="text-center text-xs text-slate-400 mt-4">
-          Free forever. No credit card required to start.
+          Free forever. No credit card required.{" "}
+          By signing up you agree to our{" "}
+          <a href="/terms" className="underline hover:text-slate-600">Terms</a>
+          {" "}and{" "}
+          <a href="/privacy" className="underline hover:text-slate-600">Privacy Policy</a>.
         </p>
       </div>
     </div>

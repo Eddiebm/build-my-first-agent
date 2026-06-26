@@ -19,7 +19,7 @@ export default async function DashboardPage({
   `;
 
   const { upgraded } = await searchParams;
-  const isPro = session.plan === "pro";
+  const isPro = session.plan === "pro" || session.plan === "business";
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -51,11 +51,19 @@ export default async function DashboardPage({
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
         {/* Upgrade banner */}
-        {upgraded && isPro && (
+        {upgraded && session.plan === "business" && (
           <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 mb-6 flex items-center gap-3">
             <span className="text-green-500 text-xl">🎉</span>
             <p className="text-green-800 font-semibold text-sm">
-              You&apos;re now on Pro! Export, chat prototype, and unlimited agents are unlocked.
+              You&apos;re now on Business! Web search, AI employees, and 1,000 msgs/day are unlocked.
+            </p>
+          </div>
+        )}
+        {upgraded && session.plan === "pro" && (
+          <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 mb-6 flex items-center gap-3">
+            <span className="text-green-500 text-xl">🎉</span>
+            <p className="text-green-800 font-semibold text-sm">
+              You&apos;re now on Pro! Unlimited agents, live AI chat, and lead capture are unlocked.
             </p>
           </div>
         )}

@@ -36,6 +36,11 @@ function HireFlow() {
     selectedRole?.id === "appointment-scheduler" ||
     selectedRole?.id === "front-desk-receptionist";
 
+  const needsWebSearch =
+    selectedRole?.id === "sales-development-rep" ||
+    selectedRole?.id === "social-media-assistant" ||
+    selectedRole?.id === "grant-researcher";
+
   async function hire() {
     if (!selectedRole) return;
     setStep("hiring");
@@ -224,6 +229,20 @@ function HireFlow() {
                 />
               </div>
             </div>
+
+            {needsWebSearch && (
+              <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm">
+                <p className="font-semibold text-amber-800 mb-0.5">Web search required</p>
+                <p className="text-amber-700 text-xs">
+                  {selectedRole?.title} uses live web search to do their job.{" "}
+                  This feature requires the <strong>Business plan ($49/mo)</strong>.{" "}
+                  On Pro or Free, this employee will still work — just without web access.
+                </p>
+                <a href="/pricing" className="text-xs font-bold text-amber-800 underline mt-1 inline-block">
+                  See plans →
+                </a>
+              </div>
+            )}
 
             {error && <p className="text-sm text-red-600 mt-4">{error}</p>}
 

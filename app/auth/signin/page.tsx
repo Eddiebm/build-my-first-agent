@@ -9,6 +9,7 @@ function SignInForm() {
   const router = useRouter();
   const params = useSearchParams();
   const next = params.get("next") ?? "/dashboard";
+  const justReset = params.get("reset") === "1";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,6 +45,11 @@ function SignInForm() {
           <p className="text-slate-500 mt-2">Welcome back</p>
         </div>
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+          {justReset && (
+            <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 mb-4 text-sm text-green-800 font-medium">
+              Password updated! Sign in with your new password.
+            </div>
+          )}
           <form onSubmit={submit} className="space-y-4">
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-1.5">
@@ -60,9 +66,12 @@ function SignInForm() {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                Password
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-sm font-semibold text-slate-700">Password</label>
+                <Link href="/auth/forgot-password" className="text-xs text-brand-600 hover:underline font-medium">
+                  Forgot password?
+                </Link>
+              </div>
               <input
                 type="password"
                 value={password}

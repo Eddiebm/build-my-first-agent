@@ -337,9 +337,12 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="border-t border-slate-200 py-8 px-4 sm:px-6 text-center text-sm text-slate-400">
-        <p>
-          Build My First Agent — Teaching anyone to build AI, one question at a time.
-        </p>
+        <p className="mb-2">Build My First Agent — Teaching anyone to build AI, one question at a time.</p>
+        <div className="flex items-center justify-center gap-4">
+          <a href="/terms" className="hover:text-slate-600 transition-colors">Terms</a>
+          <a href="/privacy" className="hover:text-slate-600 transition-colors">Privacy</a>
+          <a href="mailto:hello@buildmyfirstagent.com" className="hover:text-slate-600 transition-colors">Contact</a>
+        </div>
       </footer>
     </div>
   );

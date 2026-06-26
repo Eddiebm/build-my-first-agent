@@ -3,6 +3,7 @@ export const runtime = "edge";
 import { NextRequest } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { getDb } from "@/lib/db";
+import { sendEmail, paymentFailedEmail } from "@/lib/email";
 import type Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
@@ -61,6 +62,20 @@ export async function POST(req: NextRequest) {
       UPDATE users SET plan = ${plan}
       WHERE stripe_subscription_id = ${sub.id}
     `;
+  }
+
+  if (event.type === "invoice.payment_failed") {
+    const invoice = event.data.object as Stripe.Invoice;
+    const customerId = invoice.customer as string;
+    const rows = await sql`SELECT email FROM users WHERE stripe_customer_id = ${customerId}`;
+    if (rows[0]?.email) {
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://buildmyfirstagent.com";
+      await sendEmail({
+        to: rows[0].email as string,
+        subject: "Action needed: payment failed",
+        html: paymentFailedEmail(appUrl),
+      });
+    }
   }
 
   return Response.json({ received: true });
