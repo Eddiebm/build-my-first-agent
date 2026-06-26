@@ -136,22 +136,8 @@ function runAgentLoop(
         if (!msg) break;
 
         if (!msg.tool_calls || msg.tool_calls.length === 0) {
-          // No more tool calls — stream the final text response
-          history.push({ role: "assistant", content: msg.content ?? "" });
-          const finalRes = await callLLM(apiKey, history, [], true);
-          if (!finalRes.ok || !finalRes.body) {
-            controller.enqueue(deltaEvent(msg.content ?? ""));
-            controller.enqueue(doneEvent());
-            controller.close();
-            return;
-          }
-          const reader = finalRes.body.getReader();
-          const decoder = new TextDecoder();
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            controller.enqueue(value);
-          }
+          // Stream the response content directly — no second API call needed
+          controller.enqueue(deltaEvent(msg.content ?? ""));
           controller.enqueue(doneEvent());
           controller.close();
           return;
