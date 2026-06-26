@@ -4,6 +4,7 @@ import { getSession } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { EMPLOYEE_ROLES } from "@/lib/employee-roles";
 import VoiceToggle from "@/app/components/VoiceToggle";
+import ForwardingInstructions from "@/app/components/ForwardingInstructions";
 
 export default async function DashboardPage({
   searchParams,
@@ -214,12 +215,15 @@ export default async function DashboardPage({
 
                   {/* Voice status */}
                   {voiceEnabled && phoneNumber ? (
-                    <div className="bg-purple-50 border border-purple-100 rounded-lg px-3 py-2 mb-3 flex items-center justify-between gap-2">
-                      <div>
-                        <p className="text-xs font-bold text-purple-700">📞 Phone active</p>
-                        <p className="text-xs font-mono text-purple-600 mt-0.5">{phoneNumber}</p>
+                    <div className="bg-purple-50 border border-purple-100 rounded-lg px-3 py-2 mb-3">
+                      <div className="flex items-center justify-between gap-2">
+                        <div>
+                          <p className="text-xs font-bold text-purple-700">📞 Phone active</p>
+                          <p className="text-xs font-mono text-purple-600 mt-0.5">{phoneNumber}</p>
+                        </div>
+                        <VoiceToggle agentId={agent.id as string} enabled={true} />
                       </div>
-                      <VoiceToggle agentId={agent.id as string} enabled={true} />
+                      <ForwardingInstructions phoneNumber={phoneNumber} />
                     </div>
                   ) : isPro && live ? (
                     <div className="mb-3">

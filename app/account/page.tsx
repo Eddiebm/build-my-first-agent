@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { getDb } from "@/lib/db";
+import PhoneField from "@/app/components/PhoneField";
 
 const PLAN_LABELS: Record<string, string> = { free: "Free", pro: "Pro", business: "Business" };
 const PLAN_PRICES: Record<string, string> = { free: "Free forever", pro: "$15/month", business: "$49/month" };
@@ -17,7 +18,7 @@ export default async function AccountPage() {
 
   const sql = getDb();
   const [userRows, statsRows] = await Promise.all([
-    sql`SELECT plan, stripe_customer_id, created_at FROM users WHERE id = ${session.userId}`,
+    sql`SELECT plan, stripe_customer_id, created_at, phone FROM users WHERE id = ${session.userId}`,
     sql`
       SELECT COUNT(*) AS agent_count, COALESCE(SUM(message_count), 0) AS total_messages
       FROM agents WHERE user_id = ${session.userId}
@@ -47,7 +48,7 @@ export default async function AccountPage() {
         {/* Profile */}
         <section className="bg-white rounded-xl border border-slate-200 p-6">
           <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Profile</h2>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 mb-6">
             <div className="w-12 h-12 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold text-lg">
               {session.email[0].toUpperCase()}
             </div>
@@ -58,6 +59,9 @@ export default async function AccountPage() {
                 {new Date(user?.created_at as string).toLocaleDateString("en-US", { month: "long", year: "numeric" })}
               </p>
             </div>
+          </div>
+          <div className="border-t border-slate-100 pt-5">
+            <PhoneField currentPhone={user?.phone as string | null} />
           </div>
         </section>
 
