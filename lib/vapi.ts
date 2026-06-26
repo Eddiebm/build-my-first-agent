@@ -39,6 +39,8 @@ export async function createAssistant({
       endCallFunctionEnabled: true,
       endCallMessage: "Thank you for calling. Someone from our team will follow up with you shortly. Have a great day!",
       recordingEnabled: false,
+      serverUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/voice/webhook`,
+      serverUrlSecret: process.env.VAPI_WEBHOOK_SECRET,
     }),
   });
   if (!res.ok) throw new Error(`Vapi createAssistant failed: ${await res.text()}`);
