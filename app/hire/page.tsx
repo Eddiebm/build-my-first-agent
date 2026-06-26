@@ -258,15 +258,18 @@ function HireFlow() {
 
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-1.5">
-                  Describe your business in one sentence
+                  Employee Handbook
                 </label>
                 <textarea
                   value={context}
                   onChange={(e) => setContext(e.target.value)}
-                  placeholder={`e.g. We manage 12 residential properties in Atlanta and help tenants with leasing and maintenance.`}
-                  rows={2}
-                  className="w-full border-2 border-slate-200 focus:border-brand-400 focus:outline-none rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 text-sm resize-none transition-colors"
+                  placeholder={`Paste your FAQ, services, prices, hours, and any policies ${selectedRole?.humanName ?? "they"} should know.\n\ne.g. We manage 12 residential properties in Atlanta. Office hours: Mon–Fri 9am–5pm. Monthly rent is due on the 1st. Emergency maintenance: 404-555-0100.`}
+                  rows={7}
+                  className="w-full border-2 border-slate-200 focus:border-brand-400 focus:outline-none rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 text-sm resize-y transition-colors"
                 />
+                <p className="text-xs text-slate-400 mt-1">
+                  The more you give {selectedRole?.humanName ?? "them"}, the better they&apos;ll represent your business.
+                </p>
               </div>
 
               {wantsCalendar && (

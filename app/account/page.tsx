@@ -137,7 +137,7 @@ export default async function AccountPage() {
               <span className="text-slate-400">→</span>
             </Link>
             <Link href="/dashboard" className="flex items-center justify-between py-2 text-sm text-slate-700 hover:text-brand-600 transition-colors">
-              <span>🤖 Your agents</span>
+              <span>🤖 Your employees</span>
               <span className="text-slate-400">→</span>
             </Link>
             <a href="/terms" className="flex items-center justify-between py-2 text-sm text-slate-700 hover:text-brand-600 transition-colors">

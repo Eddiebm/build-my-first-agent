@@ -65,6 +65,107 @@ export function leadNotificationEmail({
   `;
 }
 
+export function dailyBriefingEmail({
+  agents,
+  appUrl,
+}: {
+  agents: Array<{
+    id: string;
+    name: string;
+    blueprint: { roleTitle?: string; businessName?: string; roleEmoji?: string };
+    messageCount: number;
+    dailyMessageCount: number;
+    recentLeads: Array<{ name?: string; email?: string; phone?: string; notes?: string; created_at?: string }>;
+  }>;
+  appUrl: string;
+}): string {
+  const agentCards = agents
+    .map((a) => {
+      const roleEmoji = a.blueprint?.roleEmoji ?? "🤖";
+      const roleTitle = a.blueprint?.roleTitle ?? "AI Employee";
+      const businessName = a.blueprint?.businessName ?? "";
+      const leads = a.recentLeads ?? [];
+
+      const leadRows = leads
+        .slice(0, 5)
+        .map(
+          (l) => `
+        <div style="padding:10px 0;border-bottom:1px solid #f1f5f9">
+          <p style="margin:0;font-size:14px;font-weight:700;color:#0f172a">${l.name ?? "Anonymous"}</p>
+          <p style="margin:2px 0 0;font-size:12px;color:#64748b">
+            ${l.phone ? `📞 ${l.phone}` : ""}${l.phone && l.email ? " · " : ""}${l.email ? `✉ ${l.email}` : ""}
+          </p>
+          ${l.notes ? `<p style="margin:2px 0 0;font-size:12px;color:#64748b;font-style:italic">${l.notes}</p>` : ""}
+        </div>
+      `
+        )
+        .join("");
+
+      return `
+      <div style="background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:20px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div style="width:44px;height:44px;border-radius:50%;background:#ede9fe;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${roleEmoji}</div>
+          <div style="flex:1;min-width:0">
+            <p style="margin:0;font-weight:800;color:#0f172a;font-size:16px">${a.name}</p>
+            <p style="margin:2px 0 0;color:#6366f1;font-size:13px;font-weight:600">${roleTitle}${businessName ? ` · ${businessName}` : ""}</p>
+          </div>
+          <div style="background:#dcfce7;color:#15803d;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;flex-shrink:0">● Working</div>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-bottom:16px">
+          <div style="flex:1;background:#f8fafc;border-radius:8px;padding:12px;text-align:center">
+            <p style="margin:0;font-size:22px;font-weight:800;color:#0f172a">${a.messageCount.toLocaleString()}</p>
+            <p style="margin:2px 0 0;font-size:11px;color:#64748b">total conversations</p>
+          </div>
+          <div style="flex:1;background:#ede9fe;border-radius:8px;padding:12px;text-align:center">
+            <p style="margin:0;font-size:22px;font-weight:800;color:#6366f1">${leads.length}</p>
+            <p style="margin:2px 0 0;font-size:11px;color:#6366f1">new leads (24h)</p>
+          </div>
+        </div>
+
+        ${
+          leads.length > 0
+            ? `
+          <div style="border-top:1px solid #f1f5f9;padding-top:12px;margin-bottom:12px">
+            <p style="margin:0 0 8px;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em">New Leads</p>
+            ${leadRows}
+          </div>
+          <a href="${appUrl}/leads?agentId=${a.id}" style="display:block;text-align:center;background:#6366f1;color:#fff;font-weight:700;padding:11px;border-radius:8px;text-decoration:none;font-size:14px">
+            View ${a.name}'s leads →
+          </a>
+        `
+            : `<p style="margin:0;color:#94a3b8;font-size:13px;text-align:center">No new leads in the last 24 hours.</p>`
+        }
+      </div>
+    `;
+    })
+    .join("");
+
+  const totalLeads = agents.reduce((s, a) => s + (a.recentLeads?.length ?? 0), 0);
+
+  return `
+    <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:600px;margin:0 auto;padding:24px 16px;background:#f8fafc">
+      <div style="background:#0f172a;border-radius:16px;padding:28px 24px;margin-bottom:20px">
+        <p style="color:#64748b;font-size:13px;margin:0 0 8px">Good morning ☀️</p>
+        <h1 style="color:#fff;margin:0 0 6px;font-size:24px;font-weight:800">Your employees worked overnight.</h1>
+        <p style="color:#94a3b8;margin:0;font-size:15px">
+          ${totalLeads > 0 ? `<strong style="color:#a78bfa">${totalLeads} new lead${totalLeads !== 1 ? "s" : ""}</strong> captured in the last 24 hours.` : "Here's a summary of what they handled."}
+        </p>
+      </div>
+
+      ${agentCards}
+
+      <a href="${appUrl}/dashboard" style="display:block;text-align:center;background:#fff;border:1px solid #e2e8f0;color:#6366f1;font-weight:700;padding:14px;border-radius:12px;text-decoration:none;font-size:14px;margin-bottom:20px">
+        Go to your dashboard →
+      </a>
+
+      <p style="text-align:center;color:#94a3b8;font-size:12px;margin:0">
+        Build My First Agent — AI employees for small businesses
+      </p>
+    </div>
+  `;
+}
+
 export function paymentFailedEmail(dashboardUrl: string): string {
   return `
     <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:24px">

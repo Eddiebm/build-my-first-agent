@@ -250,7 +250,7 @@ function BuilderContent() {
                   : user
                   ? savedAgentId
                     ? "Update"
-                    : "Save Agent"
+                    : "Save Employee"
                   : "Sign in to Save"}
               </button>
             )}
@@ -499,7 +499,7 @@ function BuilderContent() {
                       <div className="text-4xl mb-3">🔒</div>
                       <h3 className="text-lg font-bold text-slate-900 mb-2">Live AI chat is a Pro feature</h3>
                       <p className="text-sm text-slate-500 mb-6 max-w-sm mx-auto">
-                        Upgrade to Pro to test your agent with live AI responses.
+                        Upgrade to Pro to test your employee with live AI responses.
                       </p>
                       <Link
                         href="/pricing"

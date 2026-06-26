@@ -185,7 +185,9 @@ export default async function DashboardPage({
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
-                        <p className="font-bold text-slate-900 text-base leading-tight">{humanName}</p>
+                        <Link href={`/employee/${agent.id as string}`} className="font-bold text-slate-900 text-base leading-tight hover:text-brand-600 transition-colors">
+                          {humanName}
+                        </Link>
                         <div className="flex items-center gap-1.5 flex-shrink-0">
                           <span className={`w-2 h-2 rounded-full ${live ? "bg-green-400" : "bg-slate-300"}`} />
                           <span className={`text-xs font-medium ${live ? "text-green-600" : "text-slate-400"}`}>
