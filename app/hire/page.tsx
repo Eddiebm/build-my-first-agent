@@ -47,8 +47,43 @@ function HireFlow() {
     selectedRole?.id === "social-media-assistant" ||
     selectedRole?.id === "grant-researcher";
 
-  async function hire() {
-    if (!selectedRole) return;
+  // After signup with ?claim=1, auto-submit the draft saved in localStorage
+  useEffect(() => {
+    if (params.get("claim") !== "1") return;
+    const raw = typeof window !== "undefined"
+      ? localStorage.getItem("bmfa_hire_draft")
+      : null;
+    if (!raw) return;
+    try {
+      const saved = JSON.parse(raw) as {
+        roleId: string;
+        businessName: string;
+        context: string;
+        neverDo: string;
+        calendarUrl: string;
+      };
+      const role = EMPLOYEE_ROLES.find((r) => r.id === saved.roleId);
+      if (!role) return;
+      localStorage.removeItem("bmfa_hire_draft");
+      setSelectedRole(role);
+      setBusinessName(saved.businessName ?? "");
+      setContext(saved.context ?? "");
+      setNeverDo(saved.neverDo ?? "");
+      setCalendarUrl(saved.calendarUrl ?? "");
+      setTimeout(() => hireWith(role, saved.businessName, saved.context, saved.neverDo, saved.calendarUrl), 50);
+    } catch {
+      // corrupted — ignore and let user start fresh
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function hireWith(
+    role: EmployeeRole,
+    bn: string,
+    ctx: string,
+    nd: string,
+    cu: string,
+  ) {
     setStep("hiring");
     setError("");
 
@@ -57,11 +92,11 @@ function HireFlow() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          roleId: selectedRole.id,
-          businessName,
-          context,
-          neverDo: neverDo.trim() || undefined,
-          calendarUrl: calendarUrl.trim() || undefined,
+          roleId: role.id,
+          businessName: bn,
+          context: ctx,
+          neverDo: nd.trim() || undefined,
+          calendarUrl: cu.trim() || undefined,
         }),
       }),
       new Promise((r) => setTimeout(r, 2200)),
@@ -90,10 +125,15 @@ function HireFlow() {
       setStep("done");
     } else {
       localStorage.setItem("bmfa_hire_draft", JSON.stringify({
-        roleId: selectedRole.id, businessName, context, neverDo, calendarUrl,
+        roleId: role.id, businessName: bn, context: ctx, neverDo: nd, calendarUrl: cu,
       }));
       setStep("claim");
     }
+  }
+
+  function hire() {
+    if (!selectedRole) return;
+    hireWith(selectedRole, businessName, context, neverDo, calendarUrl);
   }
 
   function copy(text: string) {
@@ -375,13 +415,13 @@ function HireFlow() {
               Create a free account to activate them and get their shareable link. Takes 30 seconds.
             </p>
             <Link
-              href={`/auth/signup?next=/hire&claim=1`}
+              href="/auth/signup?next=%2Fhire%3Fclaim%3D1"
               className="block w-full bg-brand-500 hover:bg-brand-600 text-white font-bold py-4 rounded-2xl transition-all text-base mb-3"
             >
               Create free account to activate →
             </Link>
             <Link
-              href={`/auth/signin?next=/hire&claim=1`}
+              href="/auth/signin?next=%2Fhire%3Fclaim%3D1"
               className="block w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-xl transition-colors text-sm"
             >
               Already have an account? Sign in

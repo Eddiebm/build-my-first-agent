@@ -372,14 +372,14 @@ function QuickPage() {
               </p>
 
               <Link
-                href="/auth/signup?next=/quick&claim=1"
+                href="/auth/signup?next=%2Fquick%3Fclaim%3D1"
                 className="block w-full bg-brand-500 hover:bg-brand-600 text-white font-bold py-4 rounded-2xl transition-all text-lg mb-3"
               >
                 Create free account to activate →
               </Link>
 
               <Link
-                href="/auth/signin?next=/quick&claim=1"
+                href="/auth/signin?next=%2Fquick%3Fclaim%3D1"
                 className="block w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-xl transition-colors text-sm"
               >
                 Already have an account? Sign in
