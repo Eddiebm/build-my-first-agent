@@ -22,6 +22,14 @@ interface VapiWebhookPayload {
 }
 
 export async function POST(req: Request) {
+  const secret = process.env.VAPI_WEBHOOK_SECRET;
+  if (secret) {
+    const sig = req.headers.get("x-vapi-secret");
+    if (sig !== secret) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  }
+
   const body = await req.json() as VapiWebhookPayload;
   const msg = body?.message;
 
