@@ -115,7 +115,7 @@ export default function ChatWindow({ systemPrompt, agentName }: ChatWindowProps)
           <p className="text-xs text-green-600 font-medium">● Live prototype</p>
         </div>
         <div className="ml-auto text-xs text-slate-400 bg-slate-200 px-2 py-0.5 rounded-full">
-          {process.env.NEXT_PUBLIC_HAS_AI_KEY ? "AI powered" : "Demo mode"}
+          AI powered
         </div>
       </div>
 
