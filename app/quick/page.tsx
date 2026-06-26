@@ -8,11 +8,11 @@ type Step = "q1" | "q2" | "q3" | "building" | "done" | "claim";
 
 const EXAMPLES = [
   "Answering the same customer questions every day",
-  "Replying to tenant emails about lease renewals",
-  "Following up with leads who haven't responded",
-  "Posting on social media every week",
-  "Answering FAQ emails after hours",
-  "Summarizing long documents for my team",
+  "Missing calls when I'm on the job site",
+  "Tenants calling at midnight about availability",
+  "Chasing unpaid invoices every month",
+  "Screening job applicants before interviews",
+  "Booking appointments while I'm with other customers",
 ];
 
 export default function QuickPageWrapper() {
