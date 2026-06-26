@@ -4,18 +4,18 @@ import Link from "next/link";
 import { useState } from "react";
 
 const FREE_FEATURES = [
-  "1 AI employee",
+  "Hire 1 AI employee",
   "Chat widget for your website",
   "500 lifetime conversations",
-  "All 12 pre-built roles",
+  "All 17 AI employee roles",
   "No credit card required",
 ];
 
 const PRO_FEATURES = [
   "Everything in Free",
-  "Unlimited AI employees",
+  "Hire unlimited AI employees",
   "200 conversations/day per employee",
-  "Voice phone number (answer real calls)",
+  "Real phone number — employees answer actual calls",
   "Lead capture — saves caller info automatically",
   "Calendar booking integration",
   "Date/time & calculator tools",
@@ -109,7 +109,7 @@ export default function PricingPage() {
               Most popular
             </div>
             <div className="mb-6">
-              <p className="text-sm font-bold text-brand-100 uppercase tracking-wide mb-1">Pro</p>
+              <p className="text-sm font-bold text-brand-100 uppercase tracking-wide mb-1">Growth</p>
               <p className="text-4xl font-extrabold text-white">$15</p>
               <p className="text-brand-200 text-sm mt-1">per month</p>
             </div>
@@ -126,7 +126,7 @@ export default function PricingPage() {
               disabled={loading !== null}
               className="block w-full text-center bg-white hover:bg-brand-50 text-brand-600 font-bold py-3 rounded-xl transition-colors text-sm disabled:opacity-60"
             >
-              {loading === "pro" ? "Loading…" : "Get Pro →"}
+              {loading === "pro" ? "Loading…" : "Get Growth →"}
             </button>
           </div>
 

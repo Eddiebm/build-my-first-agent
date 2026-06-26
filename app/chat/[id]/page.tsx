@@ -35,22 +35,25 @@ export default async function PublicChatPage({ params }: Props) {
   if (rows.length === 0) notFound();
 
   const agent = rows[0];
-  const bp = agent.blueprint as { mission?: string; name?: string };
+  const bp = agent.blueprint as { mission?: string; name?: string; roleTitle?: string; roleEmoji?: string; businessName?: string };
   const FREE_LIMIT = 500;
   const atLimit = agent.owner_plan === "free" && (agent.message_count as number) >= FREE_LIMIT;
+  const subtitle = bp?.roleTitle
+    ? `${bp.roleTitle}${bp?.businessName ? ` · ${bp.businessName}` : ""}`
+    : bp?.mission;
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
       {/* Header */}
       <header className="bg-white border-b border-slate-200">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-brand-500 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
-            🤖
+          <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center text-xl flex-shrink-0">
+            {bp?.roleEmoji ?? "🤖"}
           </div>
           <div>
             <h1 className="font-bold text-slate-900 text-base">{agent.name}</h1>
-            {bp?.mission && (
-              <p className="text-xs text-slate-500 line-clamp-1">{bp.mission}</p>
+            {subtitle && (
+              <p className="text-xs text-slate-500 line-clamp-1">{subtitle}</p>
             )}
           </div>
           <div className="ml-auto flex items-center gap-1.5">

@@ -27,6 +27,7 @@ function HireFlow() {
   const [context, setContext] = useState("");
   const [neverDo, setNeverDo] = useState("");
   const [calendarUrl, setCalendarUrl] = useState("");
+  const [websiteUrl, setWebsiteUrl] = useState("");
   const [result, setResult] = useState<{
     agentId?: string;
     agentName?: string;
@@ -40,7 +41,10 @@ function HireFlow() {
   const wantsCalendar =
     selectedRole?.id === "leasing-coordinator" ||
     selectedRole?.id === "appointment-scheduler" ||
-    selectedRole?.id === "front-desk-receptionist";
+    selectedRole?.id === "front-desk-receptionist" ||
+    selectedRole?.id === "salon-booker" ||
+    selectedRole?.id === "restaurant-host" ||
+    selectedRole?.id === "gym-assistant";
 
   const needsWebSearch =
     selectedRole?.id === "sales-development-rep" ||
@@ -61,6 +65,7 @@ function HireFlow() {
         context: string;
         neverDo: string;
         calendarUrl: string;
+        websiteUrl: string;
       };
       const role = EMPLOYEE_ROLES.find((r) => r.id === saved.roleId);
       if (!role) return;
@@ -70,7 +75,8 @@ function HireFlow() {
       setContext(saved.context ?? "");
       setNeverDo(saved.neverDo ?? "");
       setCalendarUrl(saved.calendarUrl ?? "");
-      setTimeout(() => hireWith(role, saved.businessName, saved.context, saved.neverDo, saved.calendarUrl), 50);
+      setWebsiteUrl(saved.websiteUrl ?? "");
+      setTimeout(() => hireWith(role, saved.businessName, saved.context, saved.neverDo, saved.calendarUrl, saved.websiteUrl ?? ""), 50);
     } catch {
       // corrupted — ignore and let user start fresh
     }
@@ -83,6 +89,7 @@ function HireFlow() {
     ctx: string,
     nd: string,
     cu: string,
+    wu: string = "",
   ) {
     setStep("hiring");
     setError("");
@@ -97,6 +104,7 @@ function HireFlow() {
           context: ctx,
           neverDo: nd.trim() || undefined,
           calendarUrl: cu.trim() || undefined,
+          websiteUrl: wu.trim() || undefined,
         }),
       }),
       new Promise((r) => setTimeout(r, 2200)),
@@ -125,7 +133,7 @@ function HireFlow() {
       setStep("done");
     } else {
       localStorage.setItem("bmfa_hire_draft", JSON.stringify({
-        roleId: role.id, businessName: bn, context: ctx, neverDo: nd, calendarUrl: cu,
+        roleId: role.id, businessName: bn, context: ctx, neverDo: nd, calendarUrl: cu, websiteUrl: wu,
       }));
       setStep("claim");
     }
@@ -133,7 +141,7 @@ function HireFlow() {
 
   function hire() {
     if (!selectedRole) return;
-    hireWith(selectedRole, businessName, context, neverDo, calendarUrl);
+    hireWith(selectedRole, businessName, context, neverDo, calendarUrl, websiteUrl);
   }
 
   function copy(text: string) {
@@ -177,8 +185,9 @@ function HireFlow() {
                 >
                   <div className="text-3xl mb-2">{role.emoji}</div>
                   <p className="font-bold text-slate-900 text-sm group-hover:text-brand-700 transition-colors">
-                    {role.title}
+                    {role.humanName}
                   </p>
+                  <p className="text-xs text-brand-600 font-semibold mb-0.5">{role.title}</p>
                   <p className="text-xs text-slate-500 mt-1 leading-relaxed">{role.tagline}</p>
                   <div className="mt-3 space-y-0.5">
                     {role.handles.slice(0, 2).map((h) => (
@@ -206,7 +215,8 @@ function HireFlow() {
             <div className="bg-brand-50 border border-brand-100 rounded-2xl px-5 py-4 mb-6 flex items-center gap-4">
               <span className="text-4xl">{selectedRole.emoji}</span>
               <div>
-                <p className="font-extrabold text-slate-900">{selectedRole.title}</p>
+                <p className="font-extrabold text-slate-900">{selectedRole.humanName}</p>
+                <p className="text-xs font-semibold text-brand-600 mb-0.5">{selectedRole.title}</p>
                 <p className="text-sm text-slate-500">{selectedRole.tagline}</p>
               </div>
             </div>
@@ -228,6 +238,22 @@ function HireFlow() {
                   autoFocus
                   className="w-full border-2 border-slate-200 focus:border-brand-400 focus:outline-none rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 text-base transition-colors"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-slate-900 mb-1.5">
+                  Business website <span className="font-normal text-slate-400">(optional)</span>
+                </label>
+                <input
+                  type="url"
+                  value={websiteUrl}
+                  onChange={(e) => setWebsiteUrl(e.target.value)}
+                  placeholder="https://yourbusiness.com"
+                  className="w-full border-2 border-slate-200 focus:border-brand-400 focus:outline-none rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 text-sm transition-colors"
+                />
+                <p className="text-xs text-slate-400 mt-1">
+                  We&apos;ll train {selectedRole.humanName} from your website so they know your services, prices, and policies.
+                </p>
               </div>
 
               <div>
@@ -297,7 +323,7 @@ function HireFlow() {
               disabled={!businessName.trim() || !context.trim()}
               className="w-full mt-6 bg-brand-500 hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-4 rounded-2xl text-lg transition-all"
             >
-              Hire my {selectedRole.title} →
+              Hire {selectedRole.humanName} →
             </button>
 
             <div className="mt-4 bg-slate-50 rounded-xl p-4">
@@ -318,7 +344,7 @@ function HireFlow() {
           <div className="animate-fade-in text-center py-12 max-w-sm">
             <div className="text-6xl mb-5 animate-bounce">{selectedRole.emoji}</div>
             <h2 className="text-2xl font-bold text-slate-900 mb-2">
-              Hiring your {selectedRole.title}…
+              Bringing {selectedRole.humanName} onboard…
             </h2>
             <p className="text-slate-500 text-sm mb-6">
               Writing their training, setting up their knowledge, and getting them ready.
@@ -352,7 +378,7 @@ function HireFlow() {
                 Active — Ready to work
               </div>
               <h2 className="text-xl font-extrabold text-slate-900 mb-1">
-                {result.agentName ?? `${businessName} ${selectedRole.title}`}
+                {result.agentName ?? selectedRole.humanName}
               </h2>
               <p className="text-sm text-slate-500 mb-6">{selectedRole.tagline}</p>
 
@@ -375,7 +401,7 @@ function HireFlow() {
                 rel="noopener noreferrer"
                 className="block w-full bg-brand-500 hover:bg-brand-600 text-white font-bold py-3 rounded-xl transition-colors text-sm"
               >
-                Meet your new {selectedRole.title} →
+                Chat with {result.agentName ?? selectedRole.humanName} →
               </a>
             </div>
 
@@ -409,7 +435,7 @@ function HireFlow() {
           <div className="animate-fade-in text-center max-w-sm">
             <div className="text-5xl mb-4">{selectedRole.emoji}</div>
             <h2 className="text-2xl font-extrabold text-slate-900 mb-2">
-              Your {selectedRole.title} is ready!
+              {selectedRole.humanName} is ready to work!
             </h2>
             <p className="text-slate-500 mb-8 text-sm max-w-xs mx-auto">
               Create a free account to activate them and get their shareable link. Takes 30 seconds.

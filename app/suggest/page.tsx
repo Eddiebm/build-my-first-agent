@@ -490,7 +490,7 @@ export default function SuggestPage() {
 
             <div className="mt-6 text-center">
               <Link href="/hire" className="text-sm text-slate-400 hover:text-slate-600 transition-colors">
-                See all 12 available roles →
+                See all 17 available roles →
               </Link>
             </div>
           </div>

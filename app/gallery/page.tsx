@@ -23,7 +23,7 @@ export default function GalleryPage() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="text-center mb-10">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3">
-            12 AI Employees. Ready to hire.
+            {EMPLOYEE_ROLES.length} AI Employees. Ready to hire.
           </h1>
           <p className="text-lg text-slate-600 max-w-xl mx-auto">
             Pick one, tell us about your business, and they&apos;re live in 60 seconds.
@@ -38,9 +38,10 @@ export default function GalleryPage() {
               className="bg-white rounded-xl border-2 border-slate-200 hover:border-brand-400 hover:shadow-md p-6 transition-all group block"
             >
               <div className="text-4xl mb-3">{role.emoji}</div>
-              <h2 className="text-base font-bold text-slate-900 group-hover:text-brand-600 transition-colors mb-1">
-                {role.title}
+              <h2 className="text-base font-bold text-slate-900 group-hover:text-brand-600 transition-colors mb-0.5">
+                {role.humanName}
               </h2>
+              <p className="text-xs font-semibold text-brand-600 mb-2">{role.title}</p>
               <p className="text-sm text-slate-500 mb-4 leading-relaxed">{role.tagline}</p>
               <ul className="space-y-1.5">
                 {role.handles.slice(0, 2).map((h) => (
