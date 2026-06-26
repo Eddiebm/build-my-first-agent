@@ -23,13 +23,20 @@ export async function POST(req: NextRequest) {
 
   const sql = getDb();
 
+  const businessPriceId = process.env.STRIPE_BUSINESS_PRICE_ID;
+
+  function planFromPriceId(priceId: string): "pro" | "business" {
+    return businessPriceId && priceId === businessPriceId ? "business" : "pro";
+  }
+
   if (event.type === "checkout.session.completed") {
     const s = event.data.object as Stripe.Checkout.Session;
     const userId = s.metadata?.userId;
+    const tier = (s.metadata?.tier === "business" ? "business" : "pro") as "pro" | "business";
     if (userId && s.customer && s.subscription) {
       await sql`
         UPDATE users
-        SET plan = 'pro',
+        SET plan = ${tier},
             stripe_customer_id = ${s.customer as string},
             stripe_subscription_id = ${s.subscription as string}
         WHERE id = ${userId}
@@ -48,8 +55,10 @@ export async function POST(req: NextRequest) {
   if (event.type === "customer.subscription.updated") {
     const sub = event.data.object as Stripe.Subscription;
     const active = sub.status === "active" || sub.status === "trialing";
+    const priceId = sub.items.data[0]?.price.id ?? "";
+    const plan = active ? planFromPriceId(priceId) : "free";
     await sql`
-      UPDATE users SET plan = ${active ? "pro" : "free"}
+      UPDATE users SET plan = ${plan}
       WHERE stripe_subscription_id = ${sub.id}
     `;
   }

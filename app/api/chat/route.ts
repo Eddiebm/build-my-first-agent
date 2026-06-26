@@ -18,7 +18,11 @@ interface ToolCall {
 }
 
 const FREE_MESSAGE_LIMIT = 500;
+const PRO_DAILY_LIMIT = 200;
+const BUSINESS_DAILY_LIMIT = 1000;
 const MAX_TOOL_ROUNDS = 5;
+
+const BUSINESS_ONLY_TOOLS = ["web_search", "read_url"];
 
 const DEMO_RESPONSES: Record<string, string> = {
   greeting: "Hello! I'm your AI assistant. I'm here to help — what can I do for you today?",
@@ -211,6 +215,7 @@ export async function POST(req: NextRequest) {
     const sql = getDb();
     const rows = await sql`
       SELECT blueprint, published, message_count, tools, integrations,
+             daily_message_count, daily_reset_at,
              (SELECT plan FROM users WHERE id = agents.user_id) AS plan
       FROM agents WHERE id = ${agentId}
     `;
@@ -221,15 +226,40 @@ export async function POST(req: NextRequest) {
     if (!agent.published) {
       return Response.json({ error: "Agent is not published" }, { status: 403 });
     }
-    if (agent.plan === "free" && (agent.message_count as number) >= FREE_MESSAGE_LIMIT) {
+
+    const plan = agent.plan as "free" | "pro" | "business";
+    const today = new Date().toISOString().slice(0, 10);
+    const resetAt = (agent.daily_reset_at as Date | string | null);
+    const resetDateStr = resetAt ? (typeof resetAt === "string" ? resetAt.slice(0, 10) : resetAt.toISOString().slice(0, 10)) : "1970-01-01";
+    const effectiveDaily = resetDateStr < today ? 0 : (agent.daily_message_count as number) ?? 0;
+
+    if (plan === "free" && (agent.message_count as number) >= FREE_MESSAGE_LIMIT) {
       return Response.json(
         { error: "This agent has reached its message limit. The owner needs to upgrade to Pro." },
         { status: 429 }
       );
     }
+    if (plan === "pro" && effectiveDaily >= PRO_DAILY_LIMIT) {
+      return Response.json(
+        { error: "This agent has reached its daily limit (200 messages). Resets at midnight." },
+        { status: 429 }
+      );
+    }
+    if (plan === "business" && effectiveDaily >= BUSINESS_DAILY_LIMIT) {
+      return Response.json(
+        { error: "This agent has reached its daily limit (1,000 messages). Resets at midnight." },
+        { status: 429 }
+      );
+    }
+
     const bp = agent.blueprint as { systemPrompt?: string };
     systemPrompt = bp?.systemPrompt ?? "You are a helpful AI assistant.";
     agentTools = (agent.tools as string[]) ?? [];
+
+    // Gate web search and read_url to Business plan only
+    if (plan !== "business") {
+      agentTools = agentTools.filter((t) => !BUSINESS_ONLY_TOOLS.includes(t));
+    }
 
     // Inject integrations into system prompt
     const integrations = (agent.integrations ?? {}) as {
@@ -244,7 +274,14 @@ export async function POST(req: NextRequest) {
       systemPrompt += `\n\nCalendar/Booking: When the user wants to schedule a meeting, call, or appointment, share this booking link: ${integrations.calendarUrl} — do not try to handle scheduling yourself, just share the link.`;
     }
 
-    sql`UPDATE agents SET message_count = message_count + 1 WHERE id = ${agentId}`.catch(() => {});
+    // Increment counters atomically — reset daily count if date rolled over
+    sql`
+      UPDATE agents
+      SET message_count = message_count + 1,
+          daily_message_count = CASE WHEN daily_reset_at < CURRENT_DATE THEN 1 ELSE daily_message_count + 1 END,
+          daily_reset_at = CURRENT_DATE
+      WHERE id = ${agentId}
+    `.catch(() => {});
   }
 
   const apiKey = process.env.OPENROUTER_API_KEY;

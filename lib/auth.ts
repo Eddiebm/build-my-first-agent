@@ -13,7 +13,7 @@ function getSecret(): Uint8Array {
 export interface SessionPayload {
   userId: string;
   email: string;
-  plan: "free" | "pro";
+  plan: "free" | "pro" | "business";
 }
 
 export async function signToken(payload: SessionPayload): Promise<string> {

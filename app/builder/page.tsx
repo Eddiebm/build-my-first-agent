@@ -22,7 +22,7 @@ type TestTab = "chat" | "tools" | "integrate" | "publish";
 
 interface UserInfo {
   email: string;
-  plan: "free" | "pro";
+  plan: "free" | "pro" | "business";
 }
 
 function BuilderContent() {
@@ -149,7 +149,7 @@ function BuilderContent() {
 
   const question = WIZARD_QUESTIONS[currentStep];
   const isLastStep = currentStep >= WIZARD_QUESTIONS.length - 1;
-  const isPro = user?.plan === "pro";
+  const isPro = user?.plan === "pro" || user?.plan === "business";
 
   function submitAnswer() {
     const val = inputValue.trim();
@@ -542,7 +542,7 @@ function BuilderContent() {
                         }).catch(() => {});
                       }
                     }}
-                    isPro={user?.plan === "pro"}
+                    plan={user?.plan ?? "free"}
                   />
                 </div>
               )}
@@ -554,7 +554,7 @@ function BuilderContent() {
                     agentId={savedAgentId}
                     integrations={integrations}
                     onChange={setIntegrations}
-                    isPro={user?.plan === "pro"}
+                    isPro={isPro}
                   />
                 </div>
               )}

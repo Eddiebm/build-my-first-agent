@@ -2,15 +2,19 @@
 
 import { TOOL_REGISTRY } from "@/lib/tools";
 
+const BUSINESS_TOOLS = ["web_search", "read_url"];
+
 interface ToolPickerProps {
   selected: string[];
   onChange: (tools: string[]) => void;
-  isPro: boolean;
+  plan: "free" | "pro" | "business";
 }
 
-export default function ToolPicker({ selected, onChange, isPro }: ToolPickerProps) {
+export default function ToolPicker({ selected, onChange, plan }: ToolPickerProps) {
   function toggle(name: string) {
-    if (!isPro) return;
+    const needsBusiness = BUSINESS_TOOLS.includes(name);
+    if (needsBusiness && plan !== "business") return;
+    if (!needsBusiness && plan === "free") return;
     onChange(
       selected.includes(name)
         ? selected.filter((t) => t !== name)
@@ -24,7 +28,7 @@ export default function ToolPicker({ selected, onChange, isPro }: ToolPickerProp
         <p className="text-sm font-bold text-slate-900 mb-1">Give your agent superpowers</p>
         <p className="text-xs text-slate-500">
           Tools let your agent take action — not just reply.
-          {!isPro && (
+          {plan === "free" && (
             <span className="text-brand-600 font-semibold"> Pro feature — <a href="/pricing" className="underline">upgrade to unlock</a>.</span>
           )}
         </p>
@@ -32,21 +36,29 @@ export default function ToolPicker({ selected, onChange, isPro }: ToolPickerProp
 
       <div className="grid grid-cols-2 gap-2">
         {TOOL_REGISTRY.map((tool) => {
+          const needsBusiness = BUSINESS_TOOLS.includes(tool.name);
+          const locked = needsBusiness ? plan !== "business" : plan === "free";
           const active = selected.includes(tool.name);
+          const badge = needsBusiness ? "Business" : "Pro";
+
           return (
             <button
               key={tool.name}
               onClick={() => toggle(tool.name)}
-              disabled={!isPro}
+              disabled={locked}
               className={`relative p-3 rounded-xl border-2 text-left transition-all ${
                 active
                   ? "border-brand-400 bg-brand-50"
                   : "border-slate-200 bg-white hover:border-slate-300"
-              } ${!isPro ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+              } ${locked ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
             >
-              {!isPro && (
-                <span className="absolute top-2 right-2 text-xs bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-medium">
-                  Pro
+              {locked && (
+                <span className={`absolute top-2 right-2 text-xs px-1.5 py-0.5 rounded font-medium ${
+                  needsBusiness
+                    ? "bg-slate-800 text-white"
+                    : "bg-slate-200 text-slate-500"
+                }`}>
+                  {badge}
                 </span>
               )}
               <div className="text-xl mb-1">{tool.emoji}</div>

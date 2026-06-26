@@ -9,39 +9,53 @@ const FREE_FEATURES = [
   "9 learning levels",
   "8 example templates",
   "1 saved agent",
-  "Demo chat prototype",
+  "500 lifetime messages",
 ];
 
 const PRO_FEATURES = [
   "Everything in Free",
   "Unlimited saved agents",
   "Live AI chat prototype",
-  "Export system prompt",
-  "Export markdown blueprint",
-  "Export JSON config",
-  "Deployment checklist download",
+  "200 messages/day per agent",
+  "Lead capture integration",
+  "Calendar booking integration",
+  "Export system prompt & blueprint",
+  "Date/time & calculator tools",
+];
+
+const BUSINESS_FEATURES = [
+  "Everything in Pro",
+  "Web search tool (live internet)",
+  "URL reader tool",
+  "1,000 messages/day per agent",
+  "Hire a pre-built AI employee",
+  "Sales, leasing, grant research roles",
   "Priority support",
 ];
 
 export default function PricingPage() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<"pro" | "business" | null>(null);
 
-  async function upgrade() {
-    setLoading(true);
-    const res = await fetch("/api/stripe/checkout", { method: "POST" });
+  async function upgrade(tier: "pro" | "business") {
+    setLoading(tier);
+    const res = await fetch("/api/stripe/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tier }),
+    });
     if (res.status === 401) {
-      window.location.href = "/auth/signup?next=/pricing";
+      window.location.href = `/auth/signup?next=/pricing`;
       return;
     }
     const data = await res.json() as { url?: string };
     if (data.url) window.location.href = data.url;
-    else setLoading(false);
+    else setLoading(null);
   }
 
   return (
     <div className="min-h-screen bg-slate-50">
       <nav className="bg-white border-b border-slate-200 sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
           <Link href="/" className="font-extrabold text-slate-900">
             🤖 Build My First Agent
           </Link>
@@ -59,7 +73,7 @@ export default function PricingPage() {
         </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-slate-900 mb-3">Simple pricing</h1>
           <p className="text-lg text-slate-600">
@@ -67,15 +81,15 @@ export default function PricingPage() {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+        <div className="grid sm:grid-cols-3 gap-6">
           {/* Free */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-8">
+          <div className="bg-white rounded-2xl border border-slate-200 p-8 flex flex-col">
             <div className="mb-6">
               <p className="text-sm font-bold text-slate-500 uppercase tracking-wide mb-1">Free</p>
               <p className="text-4xl font-extrabold text-slate-900">$0</p>
               <p className="text-slate-500 text-sm mt-1">Forever free</p>
             </div>
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-3 mb-8 flex-1">
               {FREE_FEATURES.map((f) => (
                 <li key={f} className="flex items-start gap-2.5 text-sm text-slate-600">
                   <span className="text-green-500 mt-0.5 flex-shrink-0">✓</span>
@@ -92,7 +106,7 @@ export default function PricingPage() {
           </div>
 
           {/* Pro */}
-          <div className="bg-brand-500 rounded-2xl p-8 relative overflow-hidden">
+          <div className="bg-brand-500 rounded-2xl p-8 relative overflow-hidden flex flex-col">
             <div className="absolute top-4 right-4 bg-white/20 text-white text-xs font-bold px-2 py-0.5 rounded-full">
               Most popular
             </div>
@@ -101,7 +115,7 @@ export default function PricingPage() {
               <p className="text-4xl font-extrabold text-white">$15</p>
               <p className="text-brand-200 text-sm mt-1">per month</p>
             </div>
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-3 mb-8 flex-1">
               {PRO_FEATURES.map((f) => (
                 <li key={f} className="flex items-start gap-2.5 text-sm text-white">
                   <span className="text-green-300 mt-0.5 flex-shrink-0">✓</span>
@@ -110,12 +124,58 @@ export default function PricingPage() {
               ))}
             </ul>
             <button
-              onClick={upgrade}
-              disabled={loading}
+              onClick={() => upgrade("pro")}
+              disabled={loading !== null}
               className="block w-full text-center bg-white hover:bg-brand-50 text-brand-600 font-bold py-3 rounded-xl transition-colors text-sm disabled:opacity-60"
             >
-              {loading ? "Loading…" : "Upgrade to Pro →"}
+              {loading === "pro" ? "Loading…" : "Upgrade to Pro →"}
             </button>
+          </div>
+
+          {/* Business */}
+          <div className="bg-slate-900 rounded-2xl p-8 relative overflow-hidden flex flex-col">
+            <div className="absolute top-4 right-4 bg-white/10 text-slate-300 text-xs font-bold px-2 py-0.5 rounded-full">
+              For teams
+            </div>
+            <div className="mb-6">
+              <p className="text-sm font-bold text-slate-400 uppercase tracking-wide mb-1">Business</p>
+              <p className="text-4xl font-extrabold text-white">$49</p>
+              <p className="text-slate-400 text-sm mt-1">per month</p>
+            </div>
+            <ul className="space-y-3 mb-8 flex-1">
+              {BUSINESS_FEATURES.map((f) => (
+                <li key={f} className="flex items-start gap-2.5 text-sm text-slate-300">
+                  <span className="text-green-400 mt-0.5 flex-shrink-0">✓</span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={() => upgrade("business")}
+              disabled={loading !== null}
+              className="block w-full text-center bg-brand-500 hover:bg-brand-400 text-white font-bold py-3 rounded-xl transition-colors text-sm disabled:opacity-60"
+            >
+              {loading === "business" ? "Loading…" : "Upgrade to Business →"}
+            </button>
+          </div>
+        </div>
+
+        {/* Comparison callout */}
+        <div className="mt-10 bg-white rounded-2xl border border-slate-200 p-6">
+          <h2 className="text-sm font-bold text-slate-900 mb-4">Which plan is right for you?</h2>
+          <div className="grid sm:grid-cols-3 gap-4 text-sm text-slate-600">
+            <div>
+              <p className="font-bold text-slate-900 mb-1">Free — Try it out</p>
+              <p>Build one agent and learn how AI agents work. Perfect for exploring before committing.</p>
+            </div>
+            <div>
+              <p className="font-bold text-slate-900 mb-1">Pro — Build & deploy</p>
+              <p>Multiple agents, live AI, lead capture, and calendar booking. For builders who want to ship.</p>
+            </div>
+            <div>
+              <p className="font-bold text-brand-500 mb-1">Business — Hire AI employees</p>
+              <p>Pre-built roles (SDR, leasing, grant researcher) with live web search. For companies replacing repetitive work.</p>
+            </div>
           </div>
         </div>
 
