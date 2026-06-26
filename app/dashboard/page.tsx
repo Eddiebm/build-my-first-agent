@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { getDb } from "@/lib/db";
+import VoiceToggle from "@/app/components/VoiceToggle";
 
 export default async function DashboardPage({
   searchParams,
@@ -13,7 +14,7 @@ export default async function DashboardPage({
 
   const sql = getDb();
   const agents = await sql`
-    SELECT id, name, blueprint, published, message_count, created_at, updated_at
+    SELECT id, name, blueprint, published, message_count, voice_enabled, phone_number, created_at, updated_at
     FROM agents WHERE user_id = ${session.userId}
     ORDER BY updated_at DESC
   `;
@@ -114,6 +115,8 @@ export default async function DashboardPage({
             {agents.map((agent) => {
               const bp = agent.blueprint as { mission?: string };
               const live = agent.published as boolean;
+              const voiceEnabled = agent.voice_enabled as boolean;
+              const phoneNumber = agent.phone_number as string | null;
               const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
               return (
                 <div
@@ -137,8 +140,26 @@ export default async function DashboardPage({
                     </p>
                   )}
                   {bp?.mission && (
-                    <p className="text-xs text-slate-500 line-clamp-2 mb-4">{bp.mission}</p>
+                    <p className="text-xs text-slate-500 line-clamp-2 mb-3">{bp.mission}</p>
                   )}
+
+                  {/* Voice status */}
+                  {voiceEnabled && phoneNumber ? (
+                    <div className="bg-purple-50 border border-purple-100 rounded-lg px-3 py-2 mb-3 flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-xs font-bold text-purple-700 flex items-center gap-1">
+                          📞 Voice active
+                        </p>
+                        <p className="text-xs font-mono text-purple-600 mt-0.5">{phoneNumber}</p>
+                      </div>
+                      <VoiceToggle agentId={agent.id as string} enabled={true} />
+                    </div>
+                  ) : isPro && live ? (
+                    <div className="mb-3">
+                      <VoiceToggle agentId={agent.id as string} enabled={false} />
+                    </div>
+                  ) : null}
+
                   <div className="flex gap-2 flex-wrap">
                     <Link
                       href={`/builder?agent=${agent.id}`}
