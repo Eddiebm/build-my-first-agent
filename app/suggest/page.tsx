@@ -102,21 +102,21 @@ const SUGGESTIONS: Record<string, Suggestion[]> = {
       ],
     },
     {
-      roleId: "sales-development-rep",
-      headline: "Follow up on every lead while you focus on the actual work",
+      roleId: "ecommerce-support",
+      headline: "Handle order questions and returns without it consuming your day",
       why: [
-        "Qualifies inbound inquiries and books discovery calls",
-        "Handles objections and keeps warm leads engaged",
-        "Captures every prospect's contact info and what they want",
+        "Answers shipping, return, and product questions instantly",
+        "Captures unresolved issues so your team can follow up fast",
+        "Handles the volume of repetitive questions that eat your time",
       ],
     },
     {
-      roleId: "appointment-scheduler",
-      headline: "Fill your calendar without the back-and-forth email chains",
+      roleId: "billing-collections",
+      headline: "Stop letting unpaid invoices sit — recover what you're owed",
       why: [
-        "Books consultations, installs, or service visits automatically",
-        "Sends your booking link when someone is ready to commit",
-        "Confirms appointments so you stop getting no-shows",
+        "Sends professional payment reminders so you don't have to chase",
+        "Handles billing disputes calmly before they damage the relationship",
+        "Keeps your cash flow moving without you being the bad guy",
       ],
     },
   ],
@@ -151,6 +151,15 @@ const SUGGESTIONS: Record<string, Suggestion[]> = {
   ],
   consultant: [
     {
+      roleId: "billing-collections",
+      headline: "Stop being the one who has to chase your own invoices",
+      why: [
+        "Sends polite but firm payment reminders so you don't have to",
+        "Handles billing disputes without damaging the client relationship",
+        "Recovers overdue revenue that would otherwise take weeks to follow up on",
+      ],
+    },
+    {
       roleId: "sales-development-rep",
       headline: "Qualify leads and book discovery calls while you're in client work",
       why: [
@@ -166,15 +175,6 @@ const SUGGESTIONS: Record<string, Suggestion[]> = {
         "Drafts LinkedIn posts and thought leadership content in your voice",
         "Suggests ideas based on what's trending in your industry",
         "Creates a content calendar so you always know what to post",
-      ],
-    },
-    {
-      roleId: "appointment-scheduler",
-      headline: "Eliminate the scheduling friction that loses you clients",
-      why: [
-        "Handles booking requests and sends your calendar link at the right moment",
-        "Captures prospect details before the call so you're prepared",
-        "Reschedules without you lifting a finger",
       ],
     },
   ],
@@ -305,21 +305,21 @@ const SUGGESTIONS: Record<string, Suggestion[]> = {
       ],
     },
     {
-      roleId: "customer-service-rep",
-      headline: "Handle support tickets without hiring a CS team on day one",
+      roleId: "talent-screener",
+      headline: "Pre-screen candidates and book interviews without losing your week",
       why: [
-        "Answers product questions and troubleshoots common issues",
-        "Captures feedback from users that you can build on",
-        "Escalates bugs and serious problems with full context",
+        "Answers questions about open roles and what working with you is like",
+        "Pre-screens applicants so you only talk to qualified candidates",
+        "Books first interviews automatically on your calendar",
       ],
     },
     {
-      roleId: "social-media-assistant",
-      headline: "Keep your brand growing without it taking founder time",
+      roleId: "ecommerce-support",
+      headline: "Handle user and customer questions without a support team",
       why: [
-        "Drafts product updates, thought leadership, and launch content",
-        "Researches what your target users are talking about",
-        "Keeps your channels active so you look alive to investors and users",
+        "Answers product, billing, and account questions 24/7",
+        "Captures user feedback that feeds directly into your roadmap",
+        "Escalates serious issues with full context so nothing falls through",
       ],
     },
   ],
@@ -354,6 +354,15 @@ const SUGGESTIONS: Record<string, Suggestion[]> = {
   ],
   trades: [
     {
+      roleId: "billing-collections",
+      headline: "Recover the money sitting in unpaid invoices",
+      why: [
+        "Sends polite but firm payment reminders before jobs go to collections",
+        "Handles billing disputes professionally so you don't lose the client",
+        "Captures updated contact info when a client's details change",
+      ],
+    },
+    {
       roleId: "appointment-scheduler",
       headline: "Book jobs and site visits without playing phone tag",
       why: [
@@ -369,15 +378,6 @@ const SUGGESTIONS: Record<string, Suggestion[]> = {
         "Answers questions about your services, availability, and pricing ranges",
         "Captures lead details so you can call back qualified jobs only",
         "Handles follow-ups on open quotes so work doesn't go to a competitor",
-      ],
-    },
-    {
-      roleId: "sales-development-rep",
-      headline: "Follow up on leads who requested quotes but went quiet",
-      why: [
-        "Re-engages contacts who asked for a quote but didn't respond",
-        "Handles price objections and explains your value",
-        "Books second-chance calls so you convert more of your pipeline",
       ],
     },
   ],
