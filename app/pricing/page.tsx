@@ -110,8 +110,8 @@ export default function PricingPage() {
             </div>
             <div className="mb-6">
               <p className="text-sm font-bold text-brand-100 uppercase tracking-wide mb-1">Growth</p>
-              <p className="text-4xl font-extrabold text-white">$15</p>
-              <p className="text-brand-200 text-sm mt-1">per month</p>
+              <p className="text-4xl font-extrabold text-white">$49</p>
+              <p className="text-brand-200 text-sm mt-1">per month · voice included</p>
             </div>
             <ul className="space-y-3 mb-8 flex-1">
               {PRO_FEATURES.map((f) => (
@@ -134,7 +134,7 @@ export default function PricingPage() {
           <div className="bg-slate-900 rounded-2xl p-8 relative overflow-hidden flex flex-col">
             <div className="mb-6">
               <p className="text-sm font-bold text-slate-400 uppercase tracking-wide mb-1">Business</p>
-              <p className="text-4xl font-extrabold text-white">$49</p>
+              <p className="text-4xl font-extrabold text-white">$99</p>
               <p className="text-slate-400 text-sm mt-1">per month</p>
             </div>
             <ul className="space-y-3 mb-8 flex-1">
@@ -162,7 +162,7 @@ export default function PricingPage() {
             {[
               { label: "Part-time receptionist", cost: "~$2,000/mo", sub: "Sick days. Turnover. Benefits. Training.", bad: true },
               { label: "Answering service", cost: "~$300/mo", sub: "Takes a message. Never books. No follow-up.", bad: true },
-              { label: "Your AI employee (Pro)", cost: "$15/mo", sub: "Answers, captures leads, books, works 24/7.", bad: false },
+              { label: "Your AI employee (Pro)", cost: "$49/mo", sub: "Answers every call, captures leads, books, works 24/7.", bad: false },
             ].map((item) => (
               <div key={item.label} className={`rounded-xl p-5 border ${item.bad ? "border-slate-200 bg-slate-50" : "border-brand-200 bg-brand-50"}`}>
                 <p className={`font-bold mb-1 ${item.bad ? "text-slate-700" : "text-brand-700"}`}>{item.label}</p>
