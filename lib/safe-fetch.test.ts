@@ -7,6 +7,8 @@ describe("publicUrl", () => {
   it("accepts ordinary websites", () => {
     expect(publicUrl("https://acme.com/about")?.hostname).toBe("acme.com");
     expect(publicUrl("http://www.acme.co.uk")?.hostname).toBe("www.acme.co.uk");
+    expect(publicUrl("https://acme.com./")).not.toBeNull();
+    expect(publicUrl("http://192.0.78.24/")).not.toBeNull(); // public (WordPress.com), unlike 192.0.0.0/24
   });
 
   it("rejects localhost, private, link-local and metadata addresses in every spelling", () => {
@@ -26,6 +28,10 @@ describe("publicUrl", () => {
       "http://[::ffff:127.0.0.1]/",
       "http://intranet/",
       "http://db.internal/",
+      "http://localhost./",
+      "http://db.internal./",
+      "http://intranet../",
+      "http://192.0.0.1/",
     ]) {
       expect(publicUrl(bad), bad).toBeNull();
     }
