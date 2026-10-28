@@ -4,14 +4,15 @@ import { NextRequest } from "next/server";
 import { getSession } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { getRoleById } from "@/lib/employee-roles";
+import { fetchPublicUrl } from "@/lib/safe-fetch";
 
 async function fetchWebsiteContent(url: string): Promise<string> {
   try {
-    const res = await fetch(url, {
+    const res = await fetchPublicUrl(url, {
       headers: { "User-Agent": "Mozilla/5.0 (compatible; BuildMyFirstAgent/1.0)" },
-      signal: AbortSignal.timeout(5000),
+      timeoutMs: 5000,
     });
-    if (!res.ok) return "";
+    if (!res || !res.ok) return "";
     const html = await res.text();
     const text = html
       .replace(/<script[\s\S]*?<\/script>/gi, "")
