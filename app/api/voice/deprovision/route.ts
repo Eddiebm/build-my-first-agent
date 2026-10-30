@@ -3,6 +3,7 @@ export const runtime = "edge";
 import { getSession } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { deleteAssistant, releasePhoneNumber } from "@/lib/vapi";
+import { reportFailure } from "@/lib/report-failure";
 
 export async function POST(req: Request) {
   const session = await getSession();
@@ -24,10 +25,10 @@ export async function POST(req: Request) {
   const agent = rows[0];
 
   if (agent.vapi_assistant_id) {
-    await deleteAssistant(agent.vapi_assistant_id as string).catch(() => {});
+    await deleteAssistant(agent.vapi_assistant_id as string).catch(reportFailure("delete the Vapi assistant"));
   }
   if (agent.vapi_phone_number_id) {
-    await releasePhoneNumber(agent.vapi_phone_number_id as string).catch(() => {});
+    await releasePhoneNumber(agent.vapi_phone_number_id as string).catch(reportFailure("release the phone number"));
   }
 
   await sql`

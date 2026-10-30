@@ -4,6 +4,7 @@ import { NextRequest } from "next/server";
 import { getDb } from "@/lib/db";
 import { getToolsByName } from "@/lib/tools";
 import { sendEmail, leadNotificationEmail } from "@/lib/email";
+import { reportFailure } from "@/lib/report-failure";
 
 interface Message {
   role: "user" | "assistant" | "system" | "tool";
@@ -311,7 +312,7 @@ export async function POST(req: NextRequest) {
                   leadPhone: args.phone,
                   notes: args.notes,
                 }),
-              }).catch(() => {});
+              }).catch(reportFailure("lead notification email"));
             }
             return `Got it! I've saved ${args.name ?? "your"} contact info for the team. Someone will follow up soon.`;
           },

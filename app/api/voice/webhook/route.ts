@@ -3,6 +3,7 @@ export const runtime = "edge";
 import { getDb } from "@/lib/db";
 import { sendEmail, leadNotificationEmail } from "@/lib/email";
 import { extractLeadFromTranscript } from "@/lib/vapi";
+import { reportFailure } from "@/lib/report-failure";
 
 interface VapiEndOfCallMessage {
   type: string;
@@ -76,7 +77,7 @@ export async function POST(req: Request) {
         leadPhone: lead.phone ?? callerNumber,
         notes: lead.notes ?? "",
       }),
-    }).catch(() => {});
+    }).catch(reportFailure("lead notification email"));
   }
 
   await sql`

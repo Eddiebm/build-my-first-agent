@@ -3,6 +3,7 @@ export const runtime = "edge";
 import { NextRequest } from "next/server";
 import { getDb } from "@/lib/db";
 import { sendEmail, leadNotificationEmail } from "@/lib/email";
+import { reportFailure } from "@/lib/report-failure";
 
 interface VapiCall {
   id: string;
@@ -94,7 +95,7 @@ export async function POST(req: NextRequest) {
             leadPhone: args.phone ?? message.call.customer?.number,
             notes: args.notes,
           }),
-        }).catch(() => {});
+        }).catch(reportFailure("lead notification email"));
       }
 
       return Response.json({ result: `Saved ${args.name ?? "caller"}'s information. I'll make sure the team follows up with you.` });
